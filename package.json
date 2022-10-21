@@ -1,0 +1,25 @@
+{
+  "name": "cluster",
+  "version": "1.0.0",
+  "description": "Node js server using express, running on cluster",
+  "main": "index.js",
+  "author": "Arpit Anand",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm run build && node build/index.js",
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && tsc"
+  },
+  "dependencies": {
+    "@types/node": "^18.11.3",
+    "cluster": "^0.7.7",
+    "express": "^4.18.2",
+    "os": "^0.1.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "nodemon": "^2.0.20"
+  }
+}

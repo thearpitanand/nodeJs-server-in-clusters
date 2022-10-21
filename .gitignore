@@ -1,0 +1,5 @@
+# Build File
+/build
+
+# Npm Packages
+/node_modules
