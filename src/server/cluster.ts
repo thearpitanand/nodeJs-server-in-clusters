@@ -1,28 +1,32 @@
 import { Server } from "./server";
 
-const os = require("os");
-const cluster = require("cluster");
-
-if (cluster.isMaster) {
-  let totalNumberOfCPUs = os.cpus();
-  console.log("Running Master Process");
-
-  for (let index = 0; index < totalNumberOfCPUs.length; index++) {
-    cluster.fork();
-  }
-  cluster.on("exit", (code: any, signal: any) => {
+export class ServerCluster {
+  private server = new Server();
+  private os = require("os");
+  private cluster = require("cluster");
+  private totalNumberOfCPUs = this.os.cpus();
+  private createNewCluster = () => this.cluster.fork();
+  private onClusterExit(code: any, signal: any) {
     if (signal) {
-      console.log(`worker was killed by signal: ${signal}`);
+      console.log(`Worker was killed by signal: ${signal}`);
     } else if (code !== 0) {
-      console.log(`worker exited with error code: ${code}`);
+      console.log(`Worker exited with error code: ${code}`);
     } else {
-      console.log("worker success!");
+      console.log("Worker success!");
     }
-    // Create New Cluster
-    cluster.fork();
-  });
-} else {
-  const server = new Server();
-  server.routes();
-  server.init();
+    this.createNewCluster();
+  }
+
+  public init() {
+    if (this.cluster.isMaster) {
+      console.log("Running Master Process");
+      for (let index = 0; index < this.totalNumberOfCPUs.length; index++) {
+        this.createNewCluster();
+      }
+      this.cluster.on("exit", this.onClusterExit);
+    } else {
+      this.server.initRoutes();
+      this.server.init();
+    }
+  }
 }

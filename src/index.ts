@@ -1,9 +1,8 @@
-import { Server } from "./server/server";
 import dotenv from "dotenv";
+import { ServerCluster } from "./server/cluster";
 
 // initialize dotEnv configuration
 dotenv.config();
 
-const server = new Server();
-server.routes();
+const server = new ServerCluster();
 server.init();

@@ -13,7 +13,7 @@ export class Server {
     this.app.listen(this.PORT, this.logServer);
   };
 
-  public routes = () => {
+  public initRoutes = () => {
     this.app.get("/", (req: Request, res: Response) => {
       return res.status(200).json({
         success: true,
